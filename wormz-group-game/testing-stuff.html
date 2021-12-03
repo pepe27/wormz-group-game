@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>testing examples</title>
+
+<!-- zimjs.com - JavaScript Canvas Framework -->
+<script src="https://zimjs.org/cdn/nft/00/zim.js"></script>
+
+<script>
+
+// See Docs under Frame for FIT, FILL, FULL, and TAG scaling modes
+const frame = new Frame(FIT, 1024, 768, light, dark);
+frame.on("ready", () => {
+    const stage = frame.stage;
+    let stageW = frame.width;
+    let stageH = frame.height;
+
+    const applePoints = [[-13.9,-30.7,0,0,-50,0,50,0,"mirror"],[100,0,0,0,0,-50,0,50,"mirror"],[-4.6,39.9,0,0,50,0,-50,0,"mirror"],[-100,0,0,0,0,50,0,-50,"mirror"]];
+
+    // put your code here
+    // EXAMPLE 1 Animate one Blob into another
+    // var targetBlob = new Blob({points:applePoints});
+    // var blob = new Blob({radius:50, points:"circle", interactive:false})
+    //    .pos(200,200)
+    //    .transformPoints("rotation", -45) // to better tween to rectangle
+    //    .animate({
+    //       props:{shape:targetBlob},
+    //       time:1,
+    //       rewind:true,
+    //       loop:true
+    //    });
+
+     ////// EXAMPLE 2 ANother exmaple
+    //  var circle = new Circle(50, "red");
+    //     circle.center().cur();
+    //     circle.expand(100); // makes hit area bigger
+    //     circle.on("click", function(){zog("yes");});
+    //
+    // let circle2 = new Circle(50, blue).drag().addTo()
+
+
+    var circle = new Circle(50, "red").center().drag().expand(100);
+    var triangle = new Triangle(100, 100, 100, "blue").loc(100,100);
+    circle.on("pressmove", function() {
+       if (triangle.hitTestCircle(circle)) {
+          stage.removeChild(triangle);
+          stage.update();
+       }
+    });
+
+
+    stage.update(); // needed to view changes
+});
+
+</script>
+<meta name="viewport" content="width=device-width, user-scalable=no" />
+</head>
+<body></body>
+</html>

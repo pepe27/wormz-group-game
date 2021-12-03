@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>wormz demo1</title>
+
+<!-- zimjs.com - JavaScript Canvas Framework -->
+<script src="https://zimjs.org/cdn/nft/00/zim.js"></script>
+
+<script>
+const path = "assets/";
+const names = ["bitcoin.png","ethereum.png","ripple.png","tether.png"]; //array with only names of coins
+
+
+// See Docs under Frame for FIT, FILL, FULL, and TAG scaling modes
+const frame = new Frame(FIT, 1024, 768, light, dark,names,path);
+frame.on("ready", () => {
+    const stage = frame.stage;
+    let stageW = frame.width;
+    let stageH = frame.height;
+
+    // put your code here
+    init();
+    const label = new Label({text:"WORMZ ~ Move the worm along the Apple, Catch the Food!",color:white}).addTo()
+    //asset("bitcoin.png").center();
+
+
+    // new Beads({
+    //    path:new Blob({points:"rectangle"}),
+    //    obj:new Circle(5, series(red, blue)),
+    //    visible:false,
+    //    count:52
+    // }).center();
+
+    function init() {
+        frame.color = "tan";
+
+        const applePoints = [[-5.4,-119.9,0,0,-19.5,0,16.7,0,"mirror"],[30.3,-86.1,0,0,-15.6,-12.2,12,9.4,"mirror"],[91.5,-61.5,0,0,-9,-13.1,14.5,21,"mirror"],[100,0,0,0,0,-20.5,0,50,"mirror"],[0,100,0,0,50,0,-50,0,"mirror"],[-100.8,13.8,0,0,0,50,0,-16.5,"mirror"],[-89.2,-63.4,0,0,-13.8,17.6,11.8,-15.1,"mirror"],[-36,-88.1,0,0,-11.3,11.5,15.5,-15.9,"mirror"]];
+
+        //THE APPLE BLOB
+        const appleBlob = new Blob({
+            color:clear,
+            borderColor:red,
+            borderWidth:5,
+            points:applePoints,
+            showControls:false,
+            interactive:false
+        }).sca(2.3).center();
+
+        //Using drag (WORM moves ALONG ITS' PATH), Cannot MotionController
+        var arrow = new Triangle(40,60,60,yellow,darker)
+            .rot(90+appleBlob.getPointAngle(0)).loc(appleBlob.pointObjects[0][1]);
+
+        arrow
+            .expand(100) //bounds increase, so easier for player to drag
+            .animate({props:{path:appleBlob},drag:true,ease:"linear",loop:true,time:4})
+            //.outline() //only shows the start
+
+        // Animate along a Blob
+        // see https://zimjs.com/nio/ examples
+        // see https://zimjs.com/explore/blobAnimate.html for more
+        // see https://zimjs.com/explore/blobAnimate2.html for more
+        // var path = new Blob().center();
+        // new Circle(10, red).addTo().animate({path:path}, 1);
+
+        const coins = new Container(stageW, stageH).addTo();
+
+        interval({min:.5, max:2}, () => {
+
+            // randomly get a coin name
+            // [index] is the array access operator
+
+            asset(names)
+                .clone() // must copy for multiple Bitmap objects
+                .centerReg()
+                .loc(rand(stageW), -100, coins)
+                .animate({
+                    props:{y:stageH + 100},
+                    time:2, //less time makes it harder for players
+                    ease:"ease-in-out", //diffrent from "linear"?
+                    call:target=>{
+                        target.dispose();
+                    }
+                })
+
+        }, null, true);
+        // null for infinte,
+        // true for start right away
+
+    // we use the Ticker class directly
+    Ticker.add(() => {
+
+        // hitTest between head and coins
+        coins.loop(coin => {
+
+            if (coin.hitTestCircles(arrow)) {
+                asset("b01.mp3").play();
+                coin.dispose();
+            }
+
+
+        }, true); // true to loop backwards
+
+        // coins.loop((coin) => {
+        //     coin.y += 5;
+        //     if (coin.y > stageH/2) {
+        //         coin.dispose(); // remove forever
+        //     }
+        // }, true); // loop backwards when removing!
+
+
+        // coin.y += 5;
+        // if (coin.y > stageH+100) {
+        //     // coin.removeFrom();
+        //     coin.dispose(); // remove forever
+        // }
+    });
+
+    }
+
+
+
+
+    stage.update(); // needed to view changes
+});
+
+</script>
+<meta name="viewport" content="width=device-width, user-scalable=no" />
+</head>
+<body></body>
+</html>
