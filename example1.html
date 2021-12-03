@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Example1</title>
+
+<!-- zimjs.com - JavaScript Canvas Framework -->
+<script src="https://zimjs.org/cdn/nft/00/zim.js"></script>
+
+<script>
+//REMEMBER TO CHANGE TIME TO SEC, PRE-ZIM CAT IS MILLISECONDS!!!
+//THESE EXAMPLES are from ZIM NIO
+// See Docs under Frame for FIT, FILL, FULL, and TAG scaling modes
+const frame = new Frame(FIT, 1024, 768, light, dark);
+frame.on("ready", () => {
+    const stage = frame.stage;
+    let stageW = frame.width;
+    let stageH = frame.height;
+
+    // put your code here
+
+    var blob=new Blob({
+        radius:200,borderColor:blue,stickColor:light,borderWidth:5,onTop:false
+        }).center();
+
+    //new TransformManager(blob,"test");
+
+    var arrow=new Triangle(40,60,60,yellow,darker)
+        .rot(90+blob.getPointAngle(0)).loc(blob.pointObjects[0][1]);
+
+    var go=new Button({width:80,height:60,corner:0,label:"GO",toggle:"NO",backgroundColor:purple,rollBackgroundColor:pink}).centerReg().pos(40,30,true);
+
+    go.on("click",function(){
+        if(zot(arrow.paused)){
+            arrow
+            .rot(90).
+            animate({props:{path:blob},ease:"linear",loop:true,time:4});
+        }else{
+            arrow.pauseAnimate(!go.toggled);
+        }
+    });
+
+    var checkBox=new CheckBox({label:"edit path",color:light,indicatorColor:black,size:40,startChecked:true}).pos(30,30,null,true).alp(.8);
+    checkBox.on("change",function(){blob.visible=checkBox.checked;
+    stage.update();
+    });
+
+    new Label({text:"NIO PATH ~ click to add point, CTRL click point to remove",color:white}).alp(.5).sca(.7).pos(150,60);
+    stage.update();
+});
+
+
+
+
+</script>
+<meta name="viewport" content="width=device-width, user-scalable=no" />
+</head>
+<body></body>
+</html>

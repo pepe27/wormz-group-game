@@ -1,0 +1,60 @@
+<script>var scaling="fit";
+var width=1024;
+var height=768;
+var color=dark;
+var outerColor=darker;
+var assets=["logo_dark_s.png","pragma_e.png"]
+var path="assets/";
+var frame=new Frame(scaling,width,height,color,outerColor,assets,path);
+frame.on("ready",function(){zog("ready from ZIM Frame");
+var stage=frame.stage;
+var stageW=frame.width;
+var stageH=frame.height;
+
+var blob=new Blob({
+    radius:200,borderColor:blue,stickColor:light,borderWidth:5,onTop:false
+    }).center();
+
+new TransformManager(blob,"test");
+
+var arrow=new Triangle(40,60,60,yellow,darker)
+    .rot(90+blob.getPointAngle(0)).loc(blob.pointObjects[0][1]);
+
+var go=new Button({width:80,height:60,corner:0,label:"GO",toggle:"NO",backgroundColor:purple,rollBackgroundColor:pink}).centerReg().pos(40,30,true);
+
+go.on("click",function(){
+    if(zot(arrow.paused)){
+        arrow
+        .rot(90).
+        animate({props:{path:blob},ease:"linear",loop:true,time:4000});
+    }else{
+        arrow.pauseAnimate(!go.toggled);
+    }
+});
+
+var checkBox=new CheckBox({label:"edit path",color:light,indicatorColor:black,size:40,startChecked:true}).pos(30,30,null,true).alp(.8);
+checkBox.on("change",function(){blob.visible=checkBox.checked;
+stage.update();
+});
+frame.asset("logo_dark_s.png").pos(20,14).alp(.7).hov().expand(0).cur().tap(function(){zgo("index.html");
+});
+frame.asset("pragma_e.png").pos(0,0,true,true).alp(1).cur().tap(function(){zgo("https://zimjs.com");
+});
+new Label({text:"NIO PATH ~ click to add point, CTRL click point to remove",color:white}).alp(.5).sca(.7).pos(150,60);
+stage.update();
+});
+</script>
+
+<meta name="viewport" content="width=device-width, user-scalable=no"/>
+
+
+
+</head>
+
+<body>
+<!-- canvas with id="myCanvas" is made by zim Frame -->
+<script>var r=Math.round(Math.random()*1000000);
+document.write('<img src=/cgi-bin/traffic_plus?company=danzen&page=zimNIOpath&r='+r+' width=1 height=1>');
+</script>
+</body>
+</html>
